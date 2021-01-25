@@ -18,6 +18,12 @@ This project aims to present any ***given stock*** currently existing on the NYS
 
 stock_symbol = st.text_input("Please Insert Valid Stock Symbol Below")
 
+# OPTIONS # INSERT CHECKBOXES WITH AN UPDATE BUTTON So that things can be updated realtively easily for the user 
+# time = st.text_input("Please enter a time frame")
+# inter
+#  
+
+
 if (stock_symbol):
     data = yf.download(
         tickers=stock_symbol,
@@ -30,7 +36,7 @@ if (stock_symbol):
         proxy=None
         )
     print(data)
-    df = pd.DataFrame(data)
+    df = pd.DataFrame(data[['Open','High','Low']])
     st.dataframe(df)
     
 # def price_plot(symbol):
