@@ -18,19 +18,33 @@ This project aims to present any ***given stock*** currently existing on the NYS
 
 stock_symbol = st.text_input("Please Insert Valid Stock Symbol Below")
 
+if (stock_symbol):
+    data = yf.download(
+        tickers=stock_symbol,
+        period="ytd",
+        interval="1d",
+        group_by='ticker',
+        auto_adjust=True,
+        prepost=True,
+        threads=True,
+        proxy=None
+        )
+    print(data)
+    df = pd.DataFrame(data)
+    st.dataframe(df)
+    
+# def price_plot(symbol):
+#   df = pd.DataFrame(data[symbol].Close)
+#   df['Date'] = df.index
+#   plt.title(stock_symbol, fontweight='bold')
+#   plt.xlabel('Date', fontweight='bold')
+#   plt.ylabel('Closing Price', fontweight='bold')
+#   return st.pyplot()
 
-data = yf.download(
-        tickers = stock_symbol,
-        period = "ytd",
-        interval = "1d",
-        group_by = 'ticker',
-        auto_adjust = True,
-        prepost = True,
-        threads = True,
-        proxy = None
-    )
+# if st.button('Show Plots'):
+#     st.header('Stock Closing Price')
+#     price_plot(stock_symbol)
 
-print(data)
 
 ### THE SIDEBAR CANT BE IMPLEMENTED FOR LACK OF CONCRETE IDEA OF IMPLEMENTATION
 #st.sidebar.header('User Input Features')
