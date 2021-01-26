@@ -19,13 +19,25 @@ This project aims to present any ***given stock*** currently existing on the NYS
 
 stock_symbol = st.text_input("Please Insert Valid Stock Symbol Below")
 
-# OPTIONS # INSERT CHECKBOXES WITH AN UPDATE BUTTON So that things can be updated realtively easily for the user 
-# time = st.text_input("Please enter a time frame")
-# inter
-#  
+# OPTIONS # 
 
+st.subheader("Please select the options for data visualization below")
+choices = []
+Open = st.checkbox("Open")
+if Open: 
+    st.checkbox("Open", value = True)
 
-if (stock_symbol):
+High = st.checkbox("High")
+if High: 
+    st.checkbox("High", value = True)
+
+Low = st.checkbox("Low")
+if Low:
+    st.checkbox("Low", value = True)
+
+# OPTIONS # 
+
+if stock_symbol:
     data = yf.download(
         tickers=stock_symbol,
         period="ytd",
@@ -36,12 +48,12 @@ if (stock_symbol):
         threads=True,
         proxy=None
         )
-    print(data)
     df = pd.DataFrame(data[['Open','High','Low']])
     st.dataframe(df)
 
     quote_table = si.get_quote_table(stock_symbol, dict_result = False)
     st.dataframe(quote_table)
+
 # def price_plot(symbol):
 #   df = pd.DataFrame(data[symbol].Close)
 #   df['Date'] = df.index
@@ -67,3 +79,5 @@ if (stock_symbol):
 #     b64 = base64.b64encode(csv.encode()).decode()
 #     href = f'<a href="data:file/csv;base64,{b64}" download="SP500.csv">Download CSV File</a>'
 #     return href
+
+st.button('Update')
