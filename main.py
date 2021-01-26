@@ -9,6 +9,7 @@ from scipy import stats
 #import requests
 import base64
 
+### Title ###
 st.title('Stock Tracker')
 
 st.markdown("""
@@ -16,26 +17,12 @@ This project aims to present any ***given stock*** currently existing on the NYS
 * **Python libraries:** pandas, streamlit, numpy, matplotlib, yfinance    
 """)
 
+### SIDEBAR USER INPUT AREA
+st.sidebar.header("User Input")
+stock_symbol = st.sidebar.text_input("Please Insert Valid Stock Symbol Below")
 
-stock_symbol = st.text_input("Please Insert Valid Stock Symbol Below")
-
-# OPTIONS # 
-
-st.subheader("Please select the options for data visualization below")
-choices = []
-Open = st.checkbox("Open")
-if Open: 
-    st.checkbox("Open", value = True)
-
-High = st.checkbox("High")
-if High: 
-    st.checkbox("High", value = True)
-
-Low = st.checkbox("Low")
-if Low:
-    st.checkbox("Low", value = True)
-
-# OPTIONS # 
+## OPTIONS ## 
+Selected_Metrics = st.sidebar.multiselect('Metrics', "Open", "High", "Low")
 
 if stock_symbol:
     data = yf.download(
@@ -51,6 +38,7 @@ if stock_symbol:
     df = pd.DataFrame(data[['Open','High','Low']])
     st.dataframe(df)
 
+if st.button("Show Extended Information"):   
     quote_table = si.get_quote_table(stock_symbol, dict_result = False)
     st.dataframe(quote_table)
 
