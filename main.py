@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 import yfinance as yf
+import yahoo_fin.stock_info as si
 from scipy import stats 
 #import requests
 import base64
@@ -38,7 +39,9 @@ if (stock_symbol):
     print(data)
     df = pd.DataFrame(data[['Open','High','Low']])
     st.dataframe(df)
-    
+
+    quote_table = si.get_quote_table(stock_symbol, dict_result = False)
+    st.dataframe(quote_table)
 # def price_plot(symbol):
 #   df = pd.DataFrame(data[symbol].Close)
 #   df['Date'] = df.index
