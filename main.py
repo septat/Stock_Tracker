@@ -9,38 +9,44 @@ from scipy import stats
 #import requests
 import base64
 
-### Title ###
-st.title('Stock Tracker')
+def price_history(stock_info):
+	st.line_chart(stock_info,0,0,True) 
 
-st.markdown("""
-This project aims to present any ***given stock*** currently existing on the NYSE with information regarding opening and closing price, its price to expense ratio, and a graph charting its performance.
-* **Python libraries:** pandas, streamlit, numpy, matplotlib, yfinance    
-""")
 
-### SIDEBAR USER INPUT AREA
-st.sidebar.header("User Input")
-stock_symbol = st.sidebar.text_input("Please Insert Valid Stock Symbol Below")
+def main():
 
-## OPTIONS ## 
-Selected_Metrics = st.sidebar.multiselect('Metrics', "Open", "High", "Low")
+    ### Title ###
+	st.title('Stock Tracker')
 
-if stock_symbol:
-    data = yf.download(
-        tickers=stock_symbol,
-        period="ytd",
-        interval="1d",
-        group_by='ticker',
-        auto_adjust=True,
-        prepost=True,
-        threads=True,
-        proxy=None
-        )
-    df = pd.DataFrame(data[['Open','High','Low']])
-    st.dataframe(df)
+	st.markdown("""This project aims to present any ***given stock*** currently existing on the NYSE with information regarding opening and closing price, its price to expense ratio, and a graph charting its performance.
+	\n **Python libraries:** pandas, streamlit, numpy, matplotlib, yfinance""")
 
-if st.button("Show Extended Information"):   
-    quote_table = si.get_quote_table(stock_symbol, dict_result = False)
-    st.dataframe(quote_table)
+	### SIDEBAR USER INPUT AREA
+	st.sidebar.header("User Input")
+	stock_symbol = st.sidebar.text_input("Please Insert Valid Stock Symbol Below")
+
+## OPTIONS ##
+	options = st.sidebar.multiselect('Metrics', ["Open", "High", "Low"])
+	print(options)
+	if stock_symbol:
+		data = yf.download(
+			tickers=stock_symbol,
+			period="ytd",
+			interval="1d",
+			group_by='ticker',
+			auto_adjust=True,
+			prepost=True,
+			threads=True,
+			proxy=None
+			)
+		df = pd.DataFrame(data[['Open', 'High', 'Low']])
+		st.dataframe(df)
+		price_history(df)
+
+	if st.button("Show Extended Information"):
+		quote_table = si.get_quote_table(stock_symbol, dict_result=False)
+		st.dataframe(quote_table)
+
 
 # def price_plot(symbol):
 #   df = pd.DataFrame(data[symbol].Close)
@@ -59,8 +65,7 @@ if st.button("Show Extended Information"):
 #st.sidebar.header('User Input Features')
 
 
-
-# CSV FILE DOWNLOAD # 
+# CSV FILE DOWNLOAD #
 # def filedownload(df):
 #     csv = df.to_csv(index=False)
 #     # strings <-> bytes conversions
@@ -68,4 +73,5 @@ if st.button("Show Extended Information"):
 #     href = f'<a href="data:file/csv;base64,{b64}" download="SP500.csv">Download CSV File</a>'
 #     return href
 
-st.button('Update')
+main()
+    
