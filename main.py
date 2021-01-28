@@ -1,14 +1,10 @@
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-import numpy as np
 import yfinance as yf
 import yahoo_fin.stock_info as si
-from scipy import stats 
-#import requests
-import base64
 
+
+#Plotting Function (Use Bokeh Library)
 def price_history(stock_info):
 	st.line_chart(stock_info,0,0,True) 
 
@@ -74,4 +70,3 @@ def main():
 #     return href
 
 main()
-    
