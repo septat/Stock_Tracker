@@ -5,13 +5,13 @@ import yahoo_fin.stock_info as si
 
 
 # Plotting Function
-def price_history(stock_info):
+def price_history(stock_info, symbol):
+    st.write("Below is the price history based on selected criteria")
     st.line_chart(stock_info, 0, 0, True)
+    if st.button("Show Extended Information"):
+        quote_table = si.get_quote_table(symbol, dict_result=False)
+        st.dataframe(quote_table)
 
-#Extended info function
-def extended_info(stock_ticker):
-    quote_table = si.get_quote_table(stock_ticker, dict_result=False)
-    st.dataframe(quote_table)
 
 def main():
 
@@ -23,15 +23,15 @@ def main():
 
     # SIDEBAR USER INPUT AREA
     st.sidebar.header("User Input")
-    stock_symbol = st.sidebar.text_input("Please Insert Valid Stock Symbol")
-    options = st.sidebar.multiselect("Metrics", ["Open", "High", "Low"])
-    
+    stock_symbol = st.sidebar.text_input("Please Insert Valid Stock Symbol(s)")
+    options = st.sidebar.multiselect(
+        "Metrics", ["Open", "High", "Low", "Close", "Volume"]
+    )
 
-#OPTIONS#
     if st.sidebar.button("Check"):
         try:
             data = yf.download(
-                tickers=stock_symbol,
+                tickers=stock_symbol[:10],
                 period="ytd",
                 interval="1d",
                 group_by='ticker',
@@ -43,12 +43,12 @@ def main():
         except:
             st.write("Error: Please try again with a valid existing stock")
 
-        df = pd.DataFrame(data[options])
-        st.dataframe(df)
-        price_history(df)
-
-    if st.button("Show Extended Information"):
-        extended_info(stock_symbol)
+        data
+        #df = pd.DataFrame(data[options])
+        #st.dataframe(df)
+        #if "Volume" in options:
+        #    df = df.drop(columns = "Volume")
+        #price_history(df, stock_symbol)
 
 # def price_plot(symbol):
 #   df = pd.DataFrame(data[symbol].Close)
