@@ -4,45 +4,51 @@ import yfinance as yf
 import yahoo_fin.stock_info as si
 
 
-#Plotting Function (Use Bokeh Library)
+# Plotting Function
 def price_history(stock_info):
-	st.line_chart(stock_info,0,0,True) 
+    st.line_chart(stock_info, 0, 0, True)
 
+#Extended info function
+def extended_info(stock_ticker):
+    quote_table = si.get_quote_table(stock_ticker, dict_result=False)
+    st.dataframe(quote_table)
 
 def main():
 
     ### Title ###
-	st.title('Stock Tracker')
+    st.title('Stock Tracker')
 
-	st.markdown("""This project aims to present any ***given stock*** currently existing on the NYSE with information regarding opening and closing price, its price to expense ratio, and a graph charting its performance.
-	\n **Python libraries:** pandas, streamlit, numpy, matplotlib, yfinance""")
+    st.markdown("""This project aims to present any ***given stock*** currently existing on the NYSE with information on opening and closing price, its price to expense ratio, and a graph charting its performance.
+    \n **Python libraries:** pandas, streamlit, numpy, matplotlib, yfinance""")
 
-	### SIDEBAR USER INPUT AREA
-	st.sidebar.header("User Input")
-	stock_symbol = st.sidebar.text_input("Please Insert Valid Stock Symbol Below")
+    # SIDEBAR USER INPUT AREA
+    st.sidebar.header("User Input")
+    stock_symbol = st.sidebar.text_input("Please Insert Valid Stock Symbol")
+    options = st.sidebar.multiselect("Metrics", ["Open", "High", "Low"])
+    
 
-## OPTIONS ##
-	options = st.sidebar.multiselect('Metrics', ["Open", "High", "Low"])
-	print(options)
-	if stock_symbol:
-		data = yf.download(
-			tickers=stock_symbol,
-			period="ytd",
-			interval="1d",
-			group_by='ticker',
-			auto_adjust=True,
-			prepost=True,
-			threads=True,
-			proxy=None
-			)
-		df = pd.DataFrame(data[['Open', 'High', 'Low']])
-		st.dataframe(df)
-		price_history(df)
+#OPTIONS#
+    if st.sidebar.button("Check"):
+        try:
+            data = yf.download(
+                tickers=stock_symbol,
+                period="ytd",
+                interval="1d",
+                group_by='ticker',
+                auto_adjust=True,
+                prepost=True,
+                threads=True,
+                proxy=None
+            )
+        except:
+            st.write("Error: Please try again with a valid existing stock")
 
-	if st.button("Show Extended Information"):
-		quote_table = si.get_quote_table(stock_symbol, dict_result=False)
-		st.dataframe(quote_table)
+        df = pd.DataFrame(data[options])
+        st.dataframe(df)
+        price_history(df)
 
+    if st.button("Show Extended Information"):
+        extended_info(stock_symbol)
 
 # def price_plot(symbol):
 #   df = pd.DataFrame(data[symbol].Close)
@@ -57,7 +63,7 @@ def main():
 #     price_plot(stock_symbol)
 
 
-### THE SIDEBAR CANT BE IMPLEMENTED FOR LACK OF CONCRETE IDEA OF IMPLEMENTATION
+# THE SIDEBAR CANT BE IMPLEMENTED FOR LACK OF CONCRETE IDEA OF IMPLEMENTATION
 #st.sidebar.header('User Input Features')
 
 
