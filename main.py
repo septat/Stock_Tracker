@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import yfinance as yf
 import yahoo_fin.stock_info as si
+from newsapi import NewsApiClient
 
 
 # Plotting Function
@@ -13,7 +14,28 @@ def price_history(stock_info, symbol):
         st.dataframe(quote_table)
 
 
+def news_feed(key, symbol):
+    top_headlines = key.get_top_headlines(q='bitcoin',
+                                          sources='bbc-news,the-verge',
+                                          category='business',
+                                          language='en',
+                                          country='us')
+    
+    open_page = requests.get(top_headlines).json()
+
+    article = open_page["articles"]
+
+    results = []
+
+    for _ in article: 
+        results.append(_["title"])
+    
+    for i in range(len(results)):
+        print(i+1, results[i])
+
+
 def main():
+    newsapi = NewsApiClient(api_key='255b27fe48d646eb865cde09d55c7b08')
 
     ### Title ###
     st.title('Stock Tracker')
@@ -43,10 +65,9 @@ def main():
         except:
             st.write("Error: Please try again with a valid existing stock")
 
-        data
         #df = pd.DataFrame(data[options])
-        #st.dataframe(df)
-        #if "Volume" in options:
+        # st.dataframe(df)
+        # if "Volume" in options:
         #    df = df.drop(columns = "Volume")
         #price_history(df, stock_symbol)
 
