@@ -3,6 +3,7 @@ import pandas as pd
 import yfinance as yf
 import yahoo_fin.stock_info as si
 from newsapi import NewsApiClient
+import requests
 
 
 # Plotting Function
@@ -14,7 +15,7 @@ def price_history(stock_info, symbol):
         st.dataframe(quote_table)
 
 
-def news_feed(key, symbol):
+def news_feed(key):
     top_headlines = key.get_top_headlines(q='bitcoin',
                                           sources='bbc-news,the-verge',
                                           category='business',
@@ -32,6 +33,7 @@ def news_feed(key, symbol):
     
     for i in range(len(results)):
         print(i+1, results[i])
+    results
 
 
 def main():
@@ -50,6 +52,7 @@ def main():
         "Metrics", ["Open", "High", "Low", "Close", "Volume"]
     )
 
+
     if st.sidebar.button("Check"):
         try:
             data = yf.download(
@@ -62,14 +65,16 @@ def main():
                 threads=True,
                 proxy=None
             )
-        except:
+            df = pd.DataFrame(data[options])
+            st.dataframe(df)
+            if "Volume" in options:
+                df = df.drop(columns = "Volume")
+            price_history(df, stock_symbol)
+            news_feed(newsapi)
+        except ValueError:
             st.write("Error: Please try again with a valid existing stock")
 
-        #df = pd.DataFrame(data[options])
-        # st.dataframe(df)
-        # if "Volume" in options:
-        #    df = df.drop(columns = "Volume")
-        #price_history(df, stock_symbol)
+
 
 # def price_plot(symbol):
 #   df = pd.DataFrame(data[symbol].Close)
