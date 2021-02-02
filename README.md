@@ -6,8 +6,8 @@ Currently implemented features:
 -Singluar stock search 
 -Extended stock information access 
 -Plotted charts of chosen stock metrics 
+-multi stock search 
 
 In-Development / Planned features 
--multi stock search 
 -stocks with highest daily rise? 
 -built in results for events relating to stock choice (single choice only)
