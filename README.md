@@ -12,3 +12,4 @@ In-Development / Planned features
 -stocks with highest daily rise? 
 -built in results for events relating to stock choice (single choice only)
 -Further Time needed to better research different libaries for different applications
+-Implement international market information
